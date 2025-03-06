@@ -15,8 +15,6 @@ const DeviceInfo = () => {
         fetcher
     );
 
-    console.log(deviceData);
-    console.log(deviceError);   
 
     return (
         <section className="flex flex-col h-full border border-gray-500 row-span-2 col-span-2 rounded-md p-2">
@@ -46,14 +44,6 @@ const DeviceInfo = () => {
         </section>
     );
 };
-
-
-
-
-
-    
-
-
 
 
 export default DeviceInfo;
