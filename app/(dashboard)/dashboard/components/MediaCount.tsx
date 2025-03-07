@@ -13,7 +13,7 @@ const MediaCount = () => {
   );
 
   if (isLoading) return <LibrarySkeleton />;
-  if (error) return <p className="text-red-400 text-sm">{error}</p>;
+  if (error) return <p className="text-red-400 text-sm">{error.message}</p>;
   if (!data) return <p>No data available</p>;
 
   return (
