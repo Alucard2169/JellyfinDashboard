@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jellyfin Dashboard
 
-## Getting Started
+A Next.js v15+ dashboard that displays **computer stats, Jellyfin logs with filtering, known devices, and available libraries**. It includes authentication using **bcrypt and environment variables**.
 
-First, run the development server:
+## 🚀 Features
+- **System Monitoring**: Display CPU, RAM, and storage usage.
+- **Jellyfin Logs**: Filter and view logs.
+- **Device Management**: Show known devices.
+- **Media Libraries**: View available libraries.
+- **Authentication**: Secure login/signup using **bcrypt** and **environment variables**.
+- **JWT Authentication**: Tokens are stored in HTTP-only cookies.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🛠️ Setup & Installation
+### **1. Clone the repository**
+```sh
+git clone https://github.com/Alucard2169/JellyfinDashboard.git
+cd JellyfinDashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### **2. Install dependencies**
+```sh
+npm install  # or yarn install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **3. Create an environment file**
+In the project root, create a `.env.local` file:
+```sh
+IP_ADDRESS=your_server_ip
+API_KEY=your_api_key
+PORT=your_port
+USERNAME=your_username
+PASSWORD_HASH=your_bcrypt_hashed_password
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> ⚠️ The password must be **hashed with bcrypt** before storing it in `.env.local`.
 
-## Learn More
+### **4. Run the development server**
+```sh
+npm run dev  # or yarn dev
+```
+The app will be available at `http://localhost:3000`
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔑 Authentication
+### **Signup & Login Flow**
+- Users enter their **username and password**.
+- Passwords are **hashed using bcrypt**.
+- A **JWT token** is issued upon successful login.
+- The token is stored in an **HTTP-only cookie**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **Redirection Logic**
+- If the user **visits `/`**, they are:
+  - Sent to `/dashboard` if logged in.
+  - Sent to `/auth` if not authenticated.
 
-## Deploy on Vercel
+#### 📌 `app/page.tsx`
+```tsx
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+export default function Home() {
+    const token = cookies().get("token")?.value;
+    if (token) redirect("/dashboard");
+    else redirect("/auth");
+    return null;
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 🔄 Logout
+To log out, simply clear the **token cookie** and redirect to `/auth`:
+```tsx
+const handleLogout = () => {
+    document.cookie = "token=; path=/; max-age=0;";
+    router.push("/auth");
+};
+```
+
+---
+
+## ⏳ Global Loading Page
+A global loader is shown during API requests.
+
+#### 📌 Example Loader Component (`components/LoadingPage.tsx`)
+```tsx
+export default function LoadingPage() {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+}
+```
+
+---
+
+
