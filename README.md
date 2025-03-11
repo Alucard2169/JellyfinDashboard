@@ -1,6 +1,6 @@
 # Jellyfin Dashboard
 
-A Next.js v15+ dashboard that displays **computer stats, Jellyfin logs with filtering, known devices, and available libraries**. It includes authentication using **bcrypt and environment variables**.
+A dashboard that displays **computer stats, Jellyfin logs with filtering, known devices, and available libraries**. It includes authentication using **bcrypt and environment variables**.
 
 ## 🚀 Features
 - **System Monitoring**: Display CPU, RAM, and storage usage.
