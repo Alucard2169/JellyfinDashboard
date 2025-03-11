@@ -1,11 +1,14 @@
-import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function page(){
-    return (
-        <div className="flex gap-12 h-full justify-center items-center">
-            <Link href="/auth" className="w-sm text-center rounded-lg border border-amber-50"> Authentication </Link>
-            <Link href="/dashboard" className="w-sm text-center rounded-lg border border-amber-50"> Dashboard </Link>
-            <Link href="/server" className="w-sm text-center rounded-lg border border-amber-50"> Server </Link>
-        </div>
-    )
+export default function Home() {
+    const token = cookies().get("token")?.value; 
+
+    if (token) {
+        redirect("/dashboard");
+    } else {
+        redirect("/auth");
+    }
+
+    return null; 
 }

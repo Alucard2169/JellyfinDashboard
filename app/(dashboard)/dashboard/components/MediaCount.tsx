@@ -3,6 +3,7 @@
 import React from "react";
 import useSWR from "swr";
 import LibrarySkeleton from "../skeletons/library";
+import { useRouter } from "next/navigation";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -11,6 +12,8 @@ const MediaCount = () => {
     `http://${process.env.NEXT_PUBLIC_IP}:${process.env.NEXT_PUBLIC_PORT}/Library/VirtualFolders?api_key=${process.env.NEXT_PUBLIC_API_KEY}`,
     fetcher
   );
+
+  
 
   if (isLoading) return <LibrarySkeleton />;
   if (error) return <p className="text-red-400 text-sm">{error.message}</p>;
@@ -38,6 +41,16 @@ const MediaCount = () => {
 };
 
 const ServerInfo = () => {
+
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/logout", { method: "GET" }); // Call logout API
+    router.push("/auth"); // Redirect after logout
+};
+
+
+
   return (
     <div className="w-full col-span-2 grid grid-rows-2 rounded-md p-4 gap-4">
       <MediaCount />
@@ -48,22 +61,9 @@ const ServerInfo = () => {
             192.168.1.70
           </span>
         </p>
-        <p className="flex flex-col items-center font-extrabold">
-          Server Name
-          <span className="bg-white px-2 text-black rounded-md font-semibold">
-            Alucard
-          </span>
-        </p>
-        <p className="flex flex-col items-center font-extrabold">
-          Server Runtime
-          <span className="bg-white px-2 text-black rounded-md font-semibold"></span>
-        </p>
-        <p className="flex flex-col items-center font-extrabold">
-          Jellyfin Server Name
-          <span className="bg-white text-black px-2 rounded-md font-semibold">
-            LakeToyaMS
-          </span>
-        </p>
+        <button className="bg-red-400 text-black font-bold px-2 rounded-md" onClick={handleLogout}>
+          Logout
+        </button>
       </section>
     </div>
   );

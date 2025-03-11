@@ -37,6 +37,7 @@ const StatusCard: React.FC<StatusProps> = ({ statusOf }) => {
     fetcher
   );
 
+
   const [expanded, setExpanded] = useState<StatusTypes | null>(null);
   const [cpuData, setCpuData] = useState<{ name: string; value: number }[]>([]);
   const [ramData, setRamData] = useState<{ name: string; value: number }[]>([]);
@@ -56,8 +57,13 @@ const StatusCard: React.FC<StatusProps> = ({ statusOf }) => {
     }
   }, [data]);
 
-  if (error)
-    return <p className="text-red-400 text-sm">An error occurred</p>;
+  if(error) return (
+    <section className="p-2 border border-gray-600 rounded-md grid grid-rows-2 gap-2 relative">
+      <div className="bg-gray-900 flex justify-center items-center rounded-md">
+        <p className="text-red-400 font-bold">Something wrong with the server</p>
+      </div>
+    </section>
+  )
   if (isLoading) return <p>Loading...</p>;
   if (!data) return <p>No data available</p>;
 
